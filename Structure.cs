@@ -8,15 +8,32 @@ struct Angle
     
     public Angle(int degre , int minuta)
     {
-        this.degre = degre;
-        this.minuta = minuta;
-        Normalize();
-    }
-    
+    try
+            {
+                if (minuta < 0 || minuta >= 60)
+                {
+                    throw new ArgumentException("Мінути повинні бути в межах від 0 до 59!");
+                }
+
+                this.degre = degre;
+                this.minuta = minuta;
+                Normalize();
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"[Помилка конструктора]: {ex.Message} Встановлено значення 0° 0'.");
+                this.degre = 0;
+                this.minuta = 0;
+            }
+            finally
+            {
+                
+            }
+        }
     public void Normalize()
     {
-        int TotalMinutes = degre * 60 + minuta;
-        TotalMinutes = TotalMinutes %(360 * 60);
+        int totalMinutes = degre * 60 + minuta;
+        totalMinutes = totalMinutes %(360 * 60);
          if(totalMinutes < 0)
             {
                 totalMinutes += 360 * 60; 
@@ -60,6 +77,10 @@ struct Angle
         public bool IsLess(Angle other)
         {
             return (degre * 60 + minuta) < (other.degre * 60 + other.minuta);
+        }
+        public override string ToString()
+        {
+            return $"{degre}° {minuta}'";
         }
     }
     
